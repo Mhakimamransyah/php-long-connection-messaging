@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-services/Dockerfile
+    image: payment-service
+    ports:
+      - 8001:8001
+    networks:
+      - service-networks
+    depends_on:
+      - messaging
+    restart: on-failure
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-services/Dockerfile
+    image: notification-service
+    ports:
+      - 8002:8002
+    networks:
+      - service-networks
+    depends_on:
+      - messaging
+    restart: on-failure
+  
+  logistic-service:
+    build:
+      context: .
+      dockerfile: logistic-services/Dockerfile
+    image: logistic-service
+    ports:
+      - 8003:8003
+    networks:
+      - service-networks
+    depends_on:
+      - messaging
+    restart: on-failure
+  
+  messaging:
+    image: rabbitmq:management
+    hostname: messaging
+    container_name: rabbit-messaging
+    environment:
+      - RABBITMQ_DEFAULT_USER=dev
+      - RABBITMQ_DEFAULT_PASS=dev
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/
+    networks:
+      - service-networks
+
+networks:
+  service-networks:
+    driver: bridge
+
+volumes:
+  rabbitmq-data:

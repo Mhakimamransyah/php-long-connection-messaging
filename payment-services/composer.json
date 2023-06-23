@@ -1,0 +1,17 @@
+{
+    "require": {
+        "clue/framework-x": "dev-main",
+        "bunny/bunny": "@dev",
+        "vlucas/phpdotenv": "^5.5",
+        "php-amqplib/php-amqplib": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Api\\": "external/api/",
+            "Consumer\\": "external/consumer/",
+            "Business\\" : "business/",
+            "Config\\" : "config/",
+            "Repositories\\" : "repositories/"
+        }
+    }
+}
